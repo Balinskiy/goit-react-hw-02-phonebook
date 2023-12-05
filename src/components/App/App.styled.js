@@ -43,11 +43,20 @@ export const H3 = styled.h3`
   font-size: 20px;
 `;
 
-export const ContactList = styled.ul`
-  list-style-type: none;
-  padding-inline-start: 0 !important;
-`;
+export const ContactList = styled.ul``;
 
 export const ContactItem = styled.li`
   font-size: 18px;
+`;
+
+export const DeleteButton = styled.button`
+  margin-left: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d32f2f;
+  }
 `;

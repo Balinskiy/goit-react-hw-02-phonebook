@@ -4,6 +4,7 @@ import {
   Button,
   ContactItem,
   ContactList,
+  DeleteButton,
   Form,
   H1,
   H2,
@@ -15,7 +16,12 @@ import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     name: '',
     number: '',
     filter: '',
@@ -29,9 +35,22 @@ export class App extends Component {
   onSubmit = evt => {
     evt.preventDefault();
     const { name, number } = this.state;
+
+    const isDuplicate = this.state.contacts.some(
+      contact => contact.name === name && contact.number === number
+    );
+    if (isDuplicate) {
+      alert('This name is here');
+      return;
+    }
+
     const newContact = { name, number, id: nanoid() };
     this.setState(prevState => {
-      return { contacts: [newContact, ...prevState.contacts] }; // порядок виводу контактів
+      return {
+        contacts: [newContact, ...prevState.contacts],
+        name: '',
+        number: '',
+      }; // порядок виводу контактів
     });
   };
 
@@ -44,6 +63,12 @@ export class App extends Component {
     return contacts.filter(contact => {
       return contact.name.toLowerCase().includes(filter.toLowerCase());
     });
+  };
+
+  onDeleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
   };
 
   render() {
@@ -98,6 +123,11 @@ export class App extends Component {
               return (
                 <ContactItem key={contact.id}>
                   {contact.name}:{contact.number}
+                  <DeleteButton
+                    onClick={() => this.onDeleteContact(contact.id)}
+                  >
+                    Delete
+                  </DeleteButton>
                 </ContactItem>
               );
             })}
